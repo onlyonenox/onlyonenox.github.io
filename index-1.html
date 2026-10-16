@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08090f" />
+  <meta name="description" content="NØX.DEV — beginner developer building useful things, one project at a time." />
+  <title>NØX.DEV — Developer Portfolio</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08090f;
+      --surface: rgba(17, 19, 31, .72);
+      --text: #e9eaf4;
+      --muted: #8e93ad;
+      --line: #23263b;
+      --accent: #9b8cff;
+      --accent-soft: rgba(155, 140, 255, .12);
+      --shadow: 0 20px 60px rgba(0, 0, 0, .45);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    /* Live background */
+    #bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    main, footer { position: relative; z-index: 1; }
+    .wrap { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
+    header {
+      position: sticky; top: 0; z-index: 10; background: rgba(8,9,15,.8);
+      backdrop-filter: blur(14px); border-bottom: 1px solid rgba(35,38,59,.9);
+    }
+    .nav { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { font-weight: 850; letter-spacing: -.06em; font-size: 1.2rem; }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 24px; color: var(--muted); font-size: .92rem; }
+    .nav-links a:hover { color: var(--accent); }
+    .menu-btn { display: none; border: 1px solid var(--line); background: var(--surface); color: var(--text); padding: 9px 12px; border-radius: 12px; font: inherit; }
+    .hero { padding: 92px 0 76px; }
+    .hero-grid { display: grid; grid-template-columns: 1.4fr .8fr; gap: 56px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--accent); background: var(--accent-soft); padding: 7px 12px; border-radius: 999px; font-size: .82rem; font-weight: 700; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(155,140,255,.2), 0 0 14px rgba(155,140,255,.7); }
+    h1 { font-size: clamp(2.8rem, 7vw, 5.3rem); letter-spacing: -.075em; line-height: .99; margin: 24px 0 22px; }
+    h1 .accent { color: var(--accent); text-shadow: 0 0 42px rgba(155,140,255,.5); }
+    ::selection { background: rgba(155,140,255,.35); }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .hero p { color: var(--muted); font-size: 1.1rem; max-width: 590px; margin: 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 12px 17px; border-radius: 13px; font-weight: 750; font-size: .94rem; transition: transform .2s, box-shadow .2s, background .2s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--text); color: #08090f; box-shadow: 0 0 28px rgba(155,140,255,.25); }
+    .btn-secondary { border: 1px solid var(--line); background: var(--surface); }
+    .profile-card { background: var(--surface); backdrop-filter: blur(8px); border: 1px solid var(--line); padding: 26px; border-radius: 28px; box-shadow: var(--shadow); transform: rotate(1.5deg); }
+    .profile-top { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .avatar { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 18px; background: #1b1840; color: #cfc8ff; box-shadow: 0 0 22px rgba(155,140,255,.3); font-weight: 900; font-size: 1.15rem; letter-spacing: -.07em; }
+    .profile-name { font-weight: 800; }
+    .profile-role { color: var(--muted); font-size: .88rem; }
+    .status { color: var(--accent); background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .85rem; font-weight: 700; }
+    .mini-terminal { margin-top: 18px; background: #05060b; color: #cfd3ea; border: 1px solid var(--line); border-radius: 16px; padding: 17px; font: .82rem/1.9 ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .mini-terminal .green { color: var(--accent); }
+    section { padding: 64px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+    .kicker { text-transform: uppercase; letter-spacing: .13em; font-size: .76rem; font-weight: 850; color: var(--accent); }
+    h2 { margin: 6px 0 0; font-size: clamp(1.9rem, 4vw, 2.7rem); letter-spacing: -.06em; line-height: 1.1; }
+    .section-note { color: var(--muted); max-width: 430px; margin: 0; }
+    .about-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; }
+    .panel { background: var(--surface); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+    .panel p { color: var(--muted); margin: 10px 0 0; }
+    .pill-list { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .pill { border: 1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 999px; padding: 7px 11px; font-size: .82rem; font-weight: 650; }
+    .stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 18px; }
+    .stat { border: 1px solid var(--line); border-radius: 16px; padding: 15px; }
+    .stat strong { display: block; font-size: 1.3rem; letter-spacing: -.04em; }
+    .stat span { color: var(--muted); font-size: .82rem; }
+    .project-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .project { display: flex; flex-direction: column; min-height: 260px; transition: transform .2s, box-shadow .2s; }
+    .project:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .project-icon { width: 45px; height: 45px; display: grid; place-items: center; border-radius: 14px; background: var(--accent-soft); color: var(--accent); font-size: 1.25rem; font-weight: 900; }
+    .project h3 { margin: 17px 0 4px; letter-spacing: -.03em; }
+    .project p { color: var(--muted); font-size: .92rem; margin: 0 0 18px; }
+    .project .pill-list { margin-top: auto; }
+    .card-link { color: var(--accent); font-weight: 750; font-size: .92rem; margin: -6px 0 18px; }
+    .card-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .tagline { color: var(--muted); font-size: .9rem; }
+    .interest-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .interest { background: var(--surface); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+    .interest .emoji { font-size: 1.65rem; }
+    .interest h3 { margin: 12px 0 5px; }
+    .interest p { color: var(--muted); font-size: .92rem; margin: 0; }
+    .interest .pill-list { margin-top: 14px; }
+    .panel.wide { grid-column: 1 / -1; }
+    .panel.wide p { max-width: 68ch; }
+    .panel.wide p.closing { color: var(--text); font-weight: 750; margin-top: 18px; }
+    .contact { background: linear-gradient(135deg, #17143a, #0d0e1a 70%); border: 1px solid #2a2750; color: white; border-radius: 30px; padding: clamp(28px, 6vw, 56px); display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+    .contact p { color: #b9bcd6; max-width: 530px; }
+    .contact .btn-primary { background: #c9c1ff; color: #0d0e1a; }
+    footer { padding: 30px 0 40px; color: var(--muted); font-size: .86rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } .reveal { opacity: 1; transform: none; } }
+    @media (max-width: 800px) {
+      .hero { padding-top: 62px; }
+      .hero-grid, .about-grid { grid-template-columns: 1fr; gap: 28px; }
+      .profile-card { max-width: 480px; transform: none; }
+      .project-grid { grid-template-columns: repeat(2,1fr); }
+      .section-head { align-items: start; flex-direction: column; }
+      .contact { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 28px, 1080px); }
+      .nav { min-height: 64px; }
+      .menu-btn { display: inline-flex; }
+      .nav-links { display: none; position: absolute; top: 64px; left: 14px; right: 14px; flex-direction: column; align-items: stretch; gap: 0; padding: 8px; background: #0e1019; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px; }
+      .hero { padding: 48px 0 38px; }
+      h1 { font-size: clamp(2.7rem, 14vw, 4rem); }
+      section { padding: 44px 0; }
+      .project-grid, .interest-grid { grid-template-columns: 1fr; }
+      .panel { padding: 21px; }
+      .actions .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#home" aria-label="Nox Dev home">NØX<span>.DEV</span></a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu ☰</button>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#about">About</a><a href="#projects">Projects</a><a href="#interests">Interests</a><a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div class="reveal">
+          <div class="eyebrow"><span class="dot"></span> Learning. Building. Improving.</div>
+          <h1>Hey, I'm <span class="accent">NØX.</span><br />I build things<br />for the web.</h1>
+          <p>I'm a beginner developer learning ICT and coding while turning ideas into real projects. This is my corner of the internet — a place to share what I'm learning and what I'm building next.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#projects">Explore my projects <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-secondary" href="#about">A little about me</a>
+          </div>
+        </div>
+        <aside class="profile-card reveal" aria-label="Developer profile card">
+          <div class="profile-top">
+            <div class="avatar">NØ</div>
+            <div><div class="profile-name">NØX.DEV</div><div class="profile-role">Developer in progress</div></div>
+          </div>
+          <div class="status">● Currently learning and building</div>
+          <div class="mini-terminal">
+            <div><span class="green">nox@portfolio</span>:~$ whoami</div>
+            <div>curious builder</div>
+            <div><span class="green">nox@portfolio</span>:~$ goal</div>
+            <div>turn ideas into useful things_</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="section-head reveal"><div><div class="kicker">01 / About</div><h2>A learner with big ideas.</h2></div><p class="section-note">I don't know everything yet — and that's exactly why I'm building.</p></div>
+        <div class="about-grid">
+          <article class="panel reveal">
+            <h3>My story</h3>
+            <p>I'm Jesse, also known online as NØX. I'm learning ICT and software development, exploring how technology works, and practising by making projects instead of waiting until I feel like an expert.</p>
+            <p>My goal is to keep improving, solve real problems, and build products that are genuinely useful to people.</p>
+            <div class="pill-list"><span class="pill">Curious by nature</span><span class="pill">Student builder</span><span class="pill">Learning in public</span></div>
+          </article>
+          <article class="panel reveal">
+            <h3>What I'm learning</h3>
+            <p>My current focus is the foundation: understanding computers and networks, then getting more comfortable with web development and programming.</p>
+            <div class="pill-list"><span class="pill">HTML & CSS</span><span class="pill">JavaScript</span><span class="pill">Python — exploring</span><span class="pill">Git & GitHub — next</span></div>
+            <div class="stats"><div class="stat"><strong>01</strong><span>Keep learning</span></div><div class="stat"><strong>∞</strong><span>Ideas to explore</span></div></div>
+          </article>
+          <article class="panel wide reveal">
+            <h3>How my mind works</h3>
+            <p>I see the world a little differently. My mind is full of ideas, questions, and possibilities. I'm naturally curious, and when something catches my interest, I want to understand how it works, explore it, and discover what I can create with it.</p>
+            <p>Living with ADHD has its challenges, especially when it comes to staying organized, maintaining focus, and turning every idea into a finished project. But through learning, experimenting, and building things, I'm gradually discovering ways to work with my mind rather than against it.</p>
+            <p>I'm learning to break complex ideas into smaller steps, approach problems from different angles, and turn my curiosity into practical skills. Whether I'm exploring ICT, learning to code, or working on a new project, every experience teaches me something new.</p>
+            <p>For me, development isn't just about writing code. It's about asking questions, solving problems, exploring possibilities, and creating things that can make a difference.</p>
+            <p>I'm still learning how my mind works, still improving my skills, and still turning ideas into reality — one project at a time.</p>
+            <p class="closing">That's the journey behind NØX.DEV.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="wrap">
+        <div class="section-head reveal"><div><div class="kicker">02 / Selected work</div><h2>Things I'm building.</h2></div><p class="section-note">A few projects and experiments. I'll update this section as each one grows.</p></div>
+        <div class="project-grid">
+          <article class="panel project reveal"><div class="project-icon">C</div><h3>CAMPUS</h3><p>A student-life app for organising school, study groups, notes, deadlines, and campus activities. The designs and code are done. Next step: launch.</p><div class="pill-list"><span class="pill">Designed</span><span class="pill">Coded</span><span class="pill">Launching soon</span></div></article>
+          <article class="panel project reveal"><div class="project-icon">▶</div><h3>Beyond the Code</h3><p>A faceless short-video channel exploring technology, AI, and interesting “what if?” questions. It's live and growing.</p><a class="card-link" href="https://www.youtube.com/@beyondthecode1-x9e" target="_blank" rel="noreferrer">Watch the channel ↗</a><div class="pill-list"><span class="pill">Content</span><span class="pill">Live</span></div></article>
+          <article class="panel project reveal"><div class="project-icon">⌘</div><h3>My first web builds</h3><p>A growing collection of websites and coding experiments, built to practise the basics, learn from bugs, and improve one step at a time. Publishing them is next.</p><div class="pill-list"><span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">Coming soon</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="interests">
+      <div class="wrap">
+        <div class="section-head reveal"><div><div class="kicker">03 / Outside the code</div><h2>What I'm into.</h2></div><p class="section-note">A developer is a person too. Here's a little of what inspires me.</p></div>
+        <div class="interest-grid">
+          <article class="interest reveal"><div class="emoji">🎌</div><h3>Anime</h3><p>Stories, characters, power systems, and worlds that make imagination go wild.</p><div class="pill-list"><span class="pill">Naruto Shippuden</span><span class="pill">The Eminence in Shadow</span><span class="pill">Death Note</span><span class="pill">Dragon Ball</span></div></article>
+          <article class="interest reveal"><div class="emoji">🎮</div><h3>Gaming</h3><p>Competitive games, improving my skills, and the creativity behind game worlds.</p><div class="pill-list"><span class="pill">Fortnite</span><span class="pill">Free Fire</span><span class="pill">PlayStation</span><span class="pill">Geometry Dash</span></div></article>
+          <article class="interest reveal"><div class="emoji">🧠</div><h3>Technology</h3><p>Learning how things work and imagining new ways technology can help people.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact reveal">
+          <div><div class="kicker" style="color:#b9b0ff">04 / Contact</div><h2>Have an idea? Let's connect.</h2><p>I'm open to meeting other learners, discussing projects, and sharing ideas. Send me an email or follow what I'm building on GitHub.</p></div>
+          <div class="actions">
+            <!-- Public contact email. Change it here any time. -->
+            <a class="btn btn-primary" href="mailto:Jesseosikwemeh200913@gmail.com">Email me ↗</a>
+            <a class="btn btn-secondary" style="background:transparent;color:white;border-color:#4a4770" href="https://github.com/onlyonenox" target="_blank" rel="noreferrer">GitHub profile ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-inner"><span>© <span id="year"></span> NØX.DEV</span><span>Built with curiosity, patience, and code.</span><a href="#home">Back to top ↑</a></div></footer>
+  <script>
+    const menuBtn = document.querySelector('#menuBtn');
+    const navLinks = document.querySelector('#navLinks');
+    menuBtn.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }));
+    document.querySelector('#year').textContent = new Date().getFullYear();
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ---- Interactive live background ----
+    // A hidden network in the dark. Move your cursor (or finger) to light it up.
+    // Tweak these numbers to change how it looks and feels.
+    (() => {
+      const LINK_DISTANCE = 140;   // how close dots must be to connect
+      const LIGHT_RADIUS = 250;    // size of the light that follows you
+      const DENSITY = 11000;       // bigger number = fewer dots
+      const MAX_DOTS = 130;
+      const SPEED = 0.22;          // idle drift speed
+      const IDLE_MS = 2500;        // after this, a ghost light wanders on its own
+
+      const canvas = document.querySelector('#bg');
+      const ctx = canvas.getContext('2d');
+      const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const hex = (getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#9b8cff').replace('#', '');
+      const [r, g, b] = [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16));
+      const color = a => `rgba(${r},${g},${b},${a})`;
+
+      let w, h, nodes = [], frame = null, lastInput = -Infinity;
+      const pointer = { x: -9999, y: -9999 };
+      const light = { x: -9999, y: -9999 };
+
+      const makeNode = () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        bx: (Math.random() - .5) * SPEED * 2, by: (Math.random() - .5) * SPEED * 2,
+        ox: 0, oy: 0, size: 1 + Math.random() * 1.2, glow: 0
+      });
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth; h = window.innerHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const count = Math.min(MAX_DOTS, Math.round(w * h / DENSITY));
+        while (nodes.length < count) nodes.push(makeNode());
+        nodes.length = count;
+        if (motion.matches) { light.x = w * 0.7; light.y = h * 0.3; draw(); }
+      }
+
+      function update(t) {
+        // Follow the real pointer, or wander on its own when nobody is touching the page
+        if (performance.now() - lastInput > IDLE_MS) {
+          light.x = w * (0.5 + 0.38 * Math.sin(t * 0.00031));
+          light.y = h * (0.5 + 0.32 * Math.sin(t * 0.00043 + 1.3));
+        } else {
+          light.x += (pointer.x - light.x) * 0.2;
+          light.y += (pointer.y - light.y) * 0.2;
+        }
+        for (const n of nodes) {
+          const dx = n.x - light.x, dy = n.y - light.y;
+          const dist = Math.hypot(dx, dy);
+          n.glow = Math.max(0, 1 - dist / LIGHT_RADIUS);
+          if (dist < LIGHT_RADIUS * 0.8 && dist > 0.1) {
+            const push = (1 - dist / (LIGHT_RADIUS * 0.8)) * 0.35;
+            n.ox += (dx / dist) * push; n.oy += (dy / dist) * push;
+          }
+          n.ox *= 0.92; n.oy *= 0.92;
+          n.x += n.bx + n.ox; n.y += n.by + n.oy;
+          if (n.x < -10) n.x = w + 10; else if (n.x > w + 10) n.x = -10;
+          if (n.y < -10) n.y = h + 10; else if (n.y > h + 10) n.y = -10;
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        // soft pool of light under the pointer
+        const halo = ctx.createRadialGradient(light.x, light.y, 0, light.x, light.y, LIGHT_RADIUS * 1.5);
+        halo.addColorStop(0, color(0.22)); halo.addColorStop(1, color(0));
+        ctx.fillStyle = halo; ctx.fillRect(0, 0, w, h);
+
+        ctx.lineWidth = 1;
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          for (let j = i + 1; j < nodes.length; j++) {
+            const c = nodes[j], d = Math.hypot(a.x - c.x, a.y - c.y);
+            if (d < LINK_DISTANCE) {
+              const closeness = 1 - d / LINK_DISTANCE;
+              const lit = (a.glow + c.glow) / 2;
+              ctx.strokeStyle = color(closeness * (0.1 + lit * 0.95));
+              ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(c.x, c.y); ctx.stroke();
+            }
+          }
+        }
+        for (const n of nodes) {
+          if (n.glow > 0.05) {
+            ctx.fillStyle = color(n.glow * 0.18);
+            ctx.beginPath(); ctx.arc(n.x, n.y, n.size + 7 * n.glow, 0, Math.PI * 2); ctx.fill();
+          }
+          ctx.fillStyle = n.glow > 0.5 ? `rgba(255,255,255,${0.35 + n.glow * 0.6})` : color(0.3 + n.glow * 0.7);
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
+      function loop(t) { update(t); draw(); frame = requestAnimationFrame(loop); }
+      function start() { cancelAnimationFrame(frame); if (motion.matches) { light.x = w * 0.7; light.y = h * 0.3; for (const n of nodes) n.glow = Math.max(0, 1 - Math.hypot(n.x - light.x, n.y - light.y) / LIGHT_RADIUS); draw(); } else frame = requestAnimationFrame(loop); }
+
+      function move(x, y) { pointer.x = x; pointer.y = y; lastInput = performance.now(); }
+      window.addEventListener('pointermove', e => move(e.clientX, e.clientY), { passive: true });
+      window.addEventListener('touchmove', e => move(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+      window.addEventListener('touchend', () => { lastInput = performance.now(); });
+      // Click or tap to send a shockwave through the network
+      window.addEventListener('pointerdown', e => {
+        move(e.clientX, e.clientY);
+        if (motion.matches) return;
+        for (const n of nodes) {
+          const dx = n.x - e.clientX, dy = n.y - e.clientY, dist = Math.hypot(dx, dy);
+          if (dist < 300 && dist > 0.1) { const f = (1 - dist / 300) * 10; n.ox += (dx / dist) * f; n.oy += (dy / dist) * f; }
+        }
+      });
+      window.addEventListener('resize', resize);
+      motion.addEventListener('change', start);
+      resize(); start();
+    })();
+  </script>
+</body>
+</html>
